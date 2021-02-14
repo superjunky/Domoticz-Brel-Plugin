@@ -126,4 +126,61 @@ Besides the position, Domoticz can set the angle of a venetian blind in degrees.
 By default this Tilt-device in Domoticz will send a 90-degrees-command when switched on, and a 0-degrees-command when switched of. Use the slider to choose a custom position.
 
 ## Bonus: Homebridge
-Will add this later.
+So, you have Domoticz running at home, AND you have an iPhone? Chances are you have a copy of Homebridge running aswel. Then go ahead, get yourself the MQTTthing-plugin for homebride, setup MQTT for Domoticz, and add the config below to your Homebridge config. Don't forget to replace `{idx position device}` and `{idx tilt device}`... And, There you go, your Brel-blinds can be controlled from within your Apple's Homekit :)
+
+```JSON
+{
+    "accessory": "mqttthing",
+    "type": "windowCovering",
+    "name": "Blinds name",
+    "topics": {
+        "getCurrentPosition": {
+            "topic": "domoticz/out/mqtt/MQTTthing",
+            "apply": "return JSON.parse(message).idx == {idx position device} ? Math.round( 100 - JSON.parse(message).svalue1 ) : ''"
+        },
+        "setTargetPosition": {
+            "topic": "domoticz/in",
+            "apply": "return JSON.stringify({command: 'switchlight', idx: {idx position device}, switchcmd: 'Set Level', level: Math.round( 100 - message ) })"
+        },
+        "getTargetPosition": {
+            "topic": "domoticz/out/mqtt/MQTTthing",
+            "apply": "return JSON.parse(message).idx == {idx position device} ? Math.round( 100 - JSON.parse(message).svalue1 ) : ''"
+        },
+        "getPositionState": {
+            "topic": "domoticz/out/mqtt/MQTTthing",
+            "apply": "return JSON.parse(message).idx == {idx position device} ? Math.round( 100 - JSON.parse(message).svalue1 ) : ''"
+        },
+        "setHoldPosition": "<topic used to control hold position (Boolean)>",
+        "setTargetHorizontalTiltAngle": {
+            "topic": "domoticz/in",
+            "apply": "return JSON.stringify({command: 'switchlight', idx: {idx tilt device}, switchcmd: 'Set Level', level: Math.round( (message + 90) / 1.8) })"
+        },
+        "getTargetHorizontalTiltAngle": {
+            "topic": "domoticz/out/mqtt/MQTTthing",
+            "apply": "return JSON.parse(message).idx == {idx tilt device} ? Math.round( (JSON.parse(message).svalue1 * 1.8) - 90 ) : ''"
+        },
+        "getCurrentHorizontalTiltAngle": {
+            "topic": "domoticz/out/mqtt/MQTTthing",
+            "apply": "return JSON.parse(message).idx == {idx tilt device} ? Math.round( (JSON.parse(message).svalue1 * 1.8) - 90 ) : ''"
+        }
+    },
+    "positionStateValues": [
+        "decreasing-value",
+        "increasing-value",
+        "stopped-value"
+    ],
+    "startPub": [
+        {
+            "topic": "domoticz/in",
+            "message": "{\"command\": \"getdeviceinfo\", \"idx\": {idx position device} }"
+        },
+        {
+            "topic": "domoticz/in",
+            "message": "{\"command\": \"getdeviceinfo\", \"idx\": {idx tilt device} }"
+        }
+    ],
+    "manufacturer": "Superjunky",
+    "model": "Venetian Blinds",
+    "serialNumber": "Idx {idx position device}"
+}
+```
