@@ -179,7 +179,7 @@ So, you have Domoticz running at home, AND you have an iPhone? Chances are you h
             "message": "{\"command\": \"getdeviceinfo\", \"idx\": {idx tilt device} }"
         }
     ],
-    "manufacturer": "Superjunky",
+    "manufacturer": "Brel",
     "model": "Venetian Blinds",
     "serialNumber": "Idx {idx position device}"
 }
