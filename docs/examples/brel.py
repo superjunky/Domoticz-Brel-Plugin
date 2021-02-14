@@ -11,9 +11,9 @@ from datetime import datetime
 
 # Config
 DEBUG = False # BOOL
-HOST = '0.0.0.0' # STRING, 16 digit, IP of hub
+HOST = '0.0.0.0' # STRING, IP of hub
 PORT = 32100 # INT, port of hub
-ACCESSTOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX' # STRING, 32 digit, CAPS
+ACCESSTOKEN = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX' # STRING, 32 chars, CAPS
 DEVICES = ['f008d17a04d00006', 'f008d17a04d00007'] # DICT containing STRING(s), the devices (blinds) to be controlled
 
 # Parse the arguments
