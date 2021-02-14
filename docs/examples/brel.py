@@ -4,7 +4,7 @@
 # 
 # Add at least 1 arguments for position and/or angle
 # --position -p, --angle -a
-# Example: python /domoticz/scripts/brel.py -p 80 -a 80
+# Example: python /domoticz/scripts/brel.py -p 80 -a 90
 
 import socket, json, argparse
 from datetime import datetime
