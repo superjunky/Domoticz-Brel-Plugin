@@ -126,7 +126,7 @@ Besides the position, Domoticz can set the angle of a venetian blind in degrees.
 By default this Tilt-device in Domoticz will send a 90-degrees-command when switched on, and a 0-degrees-command when switched of. Use the slider to choose a custom position.
 
 ## Bonus: Homebridge
-So, you have Domoticz running at home, AND you have an iPhone? Chances are you have a copy of Homebridge running aswel. Then go ahead, get yourself the MQTTthing-plugin for homebride, setup MQTT for Domoticz, and add the config below to your Homebridge config. Don't forget to replace `{idx position device}` and `{idx tilt device}`... And, There you go, your Brel-blinds can be controlled from within your Apple's Homekit :)
+So, you have Domoticz running at home, AND you have an iPhone? Chances are you have a copy of Homebridge running aswel. Then go ahead, get yourself the MQTTthing-plugin for homebride, setup MQTT for Domoticz, and add the config below to your Homebridge config. Don't forget to replace `{idx position device}` and `{idx tilt device}` with the idx's of the Domoticz devices... And there you go, your Brel-blinds can be controlled from within your Apple's Homekit :)
 
 ```JSON
 {
