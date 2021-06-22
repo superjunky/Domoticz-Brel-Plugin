@@ -95,7 +95,7 @@ Let's start with an example:
 ```
 - The first number indicated the Domoticz device ID (idx). You can enter "-1" as a fall-back "default" for ALL devices. Use "0" (zero) for the virtual All-device.
 - Next there will be an "o" or a "c", indicating the settings will be for either "open" or "close".
-- The open- and close-sets need to have at least one "P" or "A" (or both), to specify the blinds Position and Angle.
+- The open- and close- sets need to have at least one "P" or "A" (or both), to specify the blinds Position and Angle.
 - Position values can be 0-100 (%). Angle values can be 0-180 (degrees).
 - All values are optional.
 
@@ -126,42 +126,49 @@ Besides the position, Domoticz can set the angle of a venetian blind in degrees.
 By default this Tilt-device in Domoticz will send a 90-degrees-command when switched on, and a 0-degrees-command when switched of. Use the slider to choose a custom position.
 
 ## Bonus: Homebridge
-So, you have Domoticz running at home, AND you have an iPhone? Chances are you have a copy of Homebridge running aswel. Then go ahead, get yourself the MQTTthing-plugin for homebride, setup MQTT for Domoticz, and add the config below to your Homebridge config. Don't forget to replace `{idx position device}` and `{idx tilt device}` with the idx's of the Domoticz devices... And there you go, your Brel-blinds can be controlled from within your Apple's Homekit :)
+So, you have Domoticz running at home, AND you have an iPhone? Chances are you have a copy of Homebridge running aswel. Then go ahead:
+
+- Get yourself the MQTTthing-plugin for homebride
+- Setup MQTT for Domoticz
+- And add the config below to your Homebridge config
+- Don't forget to replace `{idx_position}` and `{idx_tilt}` with the idx's of the Domoticz devices...
+
+And there you go, your Brel-blinds can be controlled from within your Apple's Homekit :)
 
 ```JSON
 {
     "accessory": "mqttthing",
     "type": "windowCovering",
-    "name": "Blinds name",
+    "name": "{Blinds name}",
     "topics": {
         "getCurrentPosition": {
             "topic": "domoticz/out/mqtt/MQTTthing",
-            "apply": "return JSON.parse(message).idx == {idx position device} ? Math.round( 100 - JSON.parse(message).svalue1 ) : ''"
+            "apply": "return JSON.parse(message).idx == {idx_position} ? Math.round( 100 - JSON.parse(message).svalue1 ) : ''"
         },
         "setTargetPosition": {
             "topic": "domoticz/in",
-            "apply": "return JSON.stringify({command: 'switchlight', idx: {idx position device}, switchcmd: 'Set Level', level: Math.round( 100 - message ) })"
+            "apply": "return JSON.stringify({command: 'switchlight', idx: {idx_position}, switchcmd: 'Set Level', level: Math.round( 100 - message ) })"
         },
         "getTargetPosition": {
             "topic": "domoticz/out/mqtt/MQTTthing",
-            "apply": "return JSON.parse(message).idx == {idx position device} ? Math.round( 100 - JSON.parse(message).svalue1 ) : ''"
+            "apply": "return JSON.parse(message).idx == {idx_position} ? Math.round( 100 - JSON.parse(message).svalue1 ) : ''"
         },
         "getPositionState": {
             "topic": "domoticz/out/mqtt/MQTTthing",
-            "apply": "return JSON.parse(message).idx == {idx position device} ? Math.round( 100 - JSON.parse(message).svalue1 ) : ''"
+            "apply": "return JSON.parse(message).idx == {idx_position} ? Math.round( 100 - JSON.parse(message).svalue1 ) : ''"
         },
         "setHoldPosition": "<topic used to control hold position (Boolean)>",
         "setTargetHorizontalTiltAngle": {
             "topic": "domoticz/in",
-            "apply": "return JSON.stringify({command: 'switchlight', idx: {idx tilt device}, switchcmd: 'Set Level', level: Math.round( (message + 90) / 1.8) })"
+            "apply": "return JSON.stringify({command: 'switchlight', idx: {idx_tilt}, switchcmd: 'Set Level', level: Math.round( (message + 90) / 1.8) })"
         },
         "getTargetHorizontalTiltAngle": {
             "topic": "domoticz/out/mqtt/MQTTthing",
-            "apply": "return JSON.parse(message).idx == {idx tilt device} ? Math.round( (JSON.parse(message).svalue1 * 1.8) - 90 ) : ''"
+            "apply": "return JSON.parse(message).idx == {idx_tilt} ? Math.round( (JSON.parse(message).svalue1 * 1.8) - 90 ) : ''"
         },
         "getCurrentHorizontalTiltAngle": {
             "topic": "domoticz/out/mqtt/MQTTthing",
-            "apply": "return JSON.parse(message).idx == {idx tilt device} ? Math.round( (JSON.parse(message).svalue1 * 1.8) - 90 ) : ''"
+            "apply": "return JSON.parse(message).idx == {idx_tilt} ? Math.round( (JSON.parse(message).svalue1 * 1.8) - 90 ) : ''"
         }
     },
     "positionStateValues": [
@@ -172,15 +179,15 @@ So, you have Domoticz running at home, AND you have an iPhone? Chances are you h
     "startPub": [
         {
             "topic": "domoticz/in",
-            "message": "{\"command\": \"getdeviceinfo\", \"idx\": {idx position device} }"
+            "message": "{\"command\": \"getdeviceinfo\", \"idx\": {idx_position} }"
         },
         {
             "topic": "domoticz/in",
-            "message": "{\"command\": \"getdeviceinfo\", \"idx\": {idx tilt device} }"
+            "message": "{\"command\": \"getdeviceinfo\", \"idx\": {idx_tilt} }"
         }
     ],
     "manufacturer": "Brel",
     "model": "Venetian Blinds",
-    "serialNumber": "Idx {idx position device}"
+    "serialNumber": "Idx {idx_position}"
 }
 ```

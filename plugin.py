@@ -201,6 +201,8 @@ class BasePlugin:
 
 	def registerDevices(self):
 
+		self.hasTimedOut = False
+
 		try:
 			# Get the token and device list
 			brel_api = brel(Parameters['Address'], self.u_port, self.brel_devices)

@@ -15,7 +15,7 @@ class brel:
 		self.brel_devices = brel_devices
 		try:
 			self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-			self.s.settimeout(3)
+			self.s.settimeout(5)
 		except socket.error as msg:
 			Domoticz.Debug ('Error Code: ' + str(msg))
 		return
