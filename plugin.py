@@ -201,7 +201,7 @@ class BasePlugin:
 
 	def registerDevices(self):
 
-		self.hasTimedOut = False
+		self.brel_devices = {}
 
 		try:
 			# Get the token and device list
