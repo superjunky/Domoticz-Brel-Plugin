@@ -26,7 +26,7 @@
         <h3>Configuration</h3>
         <ul>
 	        <li>Enter the IP of your Brel Home Hub.</li>
-	        <li>Enter the KEY of your Brel Home Hub. Get the KEY by quickly tapping 5 times on "Version 1.x.x(x)" in your Brel SmartPhone app. You'll get the 16-byte KEY in a popup, which you can then copy/paste.</li>
+	        <li>Enter the KEY of your Brel Home Hub. Get the KEY by quickly tapping 5 times on "Version 1.x.x(x)" in your Brel SmartPhone app. You'll get the 16-byte KEY in a popup, which you can then copy/paste. On Android tap next to the profile picture instead of the version-number.</li>
 	        <li>Don't forget to let Domoticz allow new devices before you activate this plugin!</li>
 	        <li>Optionally you can specify default positions and/or angle's for your blinds' Open and Close buttons. Similar to a Favorite position. Read on for learning more about this.</li>
 		</ul>
