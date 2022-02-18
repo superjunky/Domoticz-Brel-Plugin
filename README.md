@@ -143,7 +143,7 @@ And there you go, your Brel-blinds can be controlled from within your Apple's Ho
     "topics": {
         "getCurrentPosition": {
             "topic": "domoticz/out/mqtt/MQTTthing",
-            "apply": "return JSON.parse(message).idx == {idx_position} ? Math.round( 100 - JSON.parse(message).svalue1 ) : ''"
+            "apply": "return JSON.parse(message).idx == {idx_position} ? Math.round( 100 - JSON.parse(message).svalue1 ) : undefined"
         },
         "setTargetPosition": {
             "topic": "domoticz/in",
@@ -151,31 +151,25 @@ And there you go, your Brel-blinds can be controlled from within your Apple's Ho
         },
         "getTargetPosition": {
             "topic": "domoticz/out/mqtt/MQTTthing",
-            "apply": "return JSON.parse(message).idx == {idx_position} ? Math.round( 100 - JSON.parse(message).svalue1 ) : ''"
+            "apply": "return JSON.parse(message).idx == {idx_position} ? Math.round( 100 - JSON.parse(message).svalue1 ) : undefined"
         },
         "getPositionState": {
             "topic": "domoticz/out/mqtt/MQTTthing",
-            "apply": "return JSON.parse(message).idx == {idx_position} ? Math.round( 100 - JSON.parse(message).svalue1 ) : ''"
+            "apply": "return JSON.parse(message).idx == {idx_position} || JSON.parse(message).idx == {idx_tilt} ? 'STOPPED' : undefined"
         },
-        "setHoldPosition": "<topic used to control hold position (Boolean)>",
         "setTargetHorizontalTiltAngle": {
             "topic": "domoticz/in",
             "apply": "return JSON.stringify({command: 'switchlight', idx: {idx_tilt}, switchcmd: 'Set Level', level: Math.round( (message + 90) / 1.8) })"
         },
         "getTargetHorizontalTiltAngle": {
             "topic": "domoticz/out/mqtt/MQTTthing",
-            "apply": "return JSON.parse(message).idx == {idx_tilt} ? Math.round( (JSON.parse(message).svalue1 * 1.8) - 90 ) : ''"
+            "apply": "return JSON.parse(message).idx == {idx_tilt} ? Math.round( (JSON.parse(message).svalue1 * 1.8) - 90 ) : undefined"
         },
         "getCurrentHorizontalTiltAngle": {
             "topic": "domoticz/out/mqtt/MQTTthing",
-            "apply": "return JSON.parse(message).idx == {idx_tilt} ? Math.round( (JSON.parse(message).svalue1 * 1.8) - 90 ) : ''"
+            "apply": "return JSON.parse(message).idx == {idx_tilt} ? Math.round( (JSON.parse(message).svalue1 * 1.8) - 90 ) : undefined"
         }
     },
-    "positionStateValues": [
-        "decreasing-value",
-        "increasing-value",
-        "stopped-value"
-    ],
     "startPub": [
         {
             "topic": "domoticz/in",
