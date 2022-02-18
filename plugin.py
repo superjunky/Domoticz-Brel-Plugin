@@ -201,9 +201,9 @@ class BasePlugin:
 
 	def registerDevices(self):
 
-		self.brel_devices = {}
-
 		try:
+			self.brel_devices = {}
+
 			# Get the token and device list
 			brel_api = brel(Parameters['Address'], self.u_port, self.brel_devices)
 			self.brel_devices = brel_api.request_device_list()
