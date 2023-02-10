@@ -3,13 +3,12 @@
 # Author: Superjunky, 2021
 #
 # INSTALL DEPENDENCY:
-# There was some trouble to get Domoticz find the pycrypt module. Here is how I messed around:
-# apt-get update
-# apt-get install python3-dev
-# apt-get install python3-pip
-# apt remove python3-crypto
-# python3.7 -m pip install pip
-# python3.7 -m pip install pycrypt
+# 
+# pip install pycryptodome
+# 
+# There might be some trouble to get Domoticz find the pycrypt module. Try either adding a symlink in the plugin dir, pointing to the module.
+# Example: ln -s /usr/local/lib/python3.9/dist-packages/Crypto Crypto
+# Otherwise generate your own accesstoken and use the "secret" field in settings.
 #
 #
 """
@@ -47,6 +46,7 @@
 	<params>
 		<param field="Address" label="Remote address" width="300px" required="true" default="127.0.0.1"/>
 		<param field="Mode1" label="Key" width="300px" required="true" default=""/>
+		<param field="Mode3" label="Secret" width="300px" default=""/>
 		<param field="Mode2" label="Defaults" width="500px" default=""/>
 		<param field="Mode6" label="Debug" width="75">
 			<options>
@@ -148,7 +148,7 @@ class BasePlugin:
 
 			# Switches
 			if Devices[Unit].SwitchType == 0:
-				# On/off - device
+				# On/Open - device
 				if (Devices[Unit].nValue != brel_device.State) or (
 					Devices[Unit].sValue != str(brel_device.Level)
 				):
@@ -177,7 +177,7 @@ class BasePlugin:
 						)
 						deviceUpdated = True
 
-				# Dimmer 0=Off 1=On 2=%
+				# Dimmer 0=Open 1=Closed 2=%
 				if Devices[Unit].DeviceID[-2:] == ':A':
 					angle = (100/180) * int(brel_device['data']['currentAngle'])
 					if Devices[Unit].sValue != str(angle):
@@ -224,9 +224,14 @@ class BasePlugin:
 			AccessToken = self.GenerateAccessToken()
 			Domoticz.Status('AccessToken {} generated.'.format(AccessToken))
 		except:
-			Domoticz.Error('AccessToken could not be generated.')
-			self.hasTimedOut = True
-			return
+			Domoticz.Error('AccessToken could not automatically be generated.')
+
+			if Parameters['Mode3'] == '':
+				self.hasTimedOut = True
+				return
+			else:
+				Domoticz.Error('Now using the "secret" instead.')
+				self.brel_devices['AccessToken'] = Parameters['Mode3']
 
 		if self.hasTimedOut:
 			return
@@ -378,7 +383,7 @@ class BasePlugin:
 		devType = str(self.brel_devices['devices'][devID]['deviceType'])
 		devCommands = {}
 
-		if Command == "On" or Command == "Off":
+		if Command == "Close" or Command == "Open":
 			if Parameters['Mode2']:
 				try:
 					defaults = eval('{'+str(Parameters['Mode2'])+'}')
@@ -398,7 +403,7 @@ class BasePlugin:
 		# 	defaults = eval("{0:{1:{'P':15,'A':25},0:{'P':80,'A':80}},1:{1:{'P':15,'A':25},0:{'P':80,'A':80}},3:{1:{'P':15,'A':25},0:{'P':80,'A':80}}}")
 
 		try:
-			if Command == "On": # closed
+			if Command == "Close": # closed
 				if Devices[Unit].DeviceID[-2:] == ':P':
 					try:
 						if idx in defaults:
@@ -412,7 +417,7 @@ class BasePlugin:
 				if Devices[Unit].DeviceID[-2:] == ':A':
 					devCommands['A'] = 80 # 90 degrees = open
 
-			elif Command == "Off": # open
+			elif Command == "Open": # open
 				if Devices[Unit].DeviceID[-2:] == ':P':
 					try:
 						if idx in defaults:
