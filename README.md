@@ -57,7 +57,7 @@ Most systems capable of running domoticz and has a version of python3 available 
 The plugin uses the pycrypto python module ([`https://pypi.org/project/pycrypto/`](https://pypi.org/project/pycrypto/))
 
 ```shell
-  $ pip3 install pycrypto
+  $ pip3 install pycryptodome
 ```
 
 #### 3.1 Let Domoticz know about the pycrypto module
@@ -87,6 +87,7 @@ Don't forget to enable "Allow new Hardware" in the Domoticz settings page.
 - Enter the KEY of your Brel Home Hub. Get the KEY by quickly tapping 5 times on "Version 1.x.x(x)" in your Brel SmartPhone app. You'll get the 16-byte KEY in a popup, which you can then copy/paste. On Android you'll have to tap next to your profile picture instead of the version-number.
 - Don't forget to let Domoticz allow new devices before you activate this plugin!
 - Optionally you can specify default positions and/or angle's for your blinds' Open and Close buttons. Similar to a Favorite position. Read on for learning more about this.
+- If you have trouble loading your pycrypto module, you can manually add an accessToken in your settings. Get it by generating it at https://www.devglan.com/online-tools/aes-encryption-decryption
 
 #### The "Defaults array" explained
 Let's start with an example:
